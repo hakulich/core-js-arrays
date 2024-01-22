@@ -277,8 +277,13 @@ function distinct(arr) {
  *    createNDimensionalArray(4, 2) => [[[[0, 0], [0, 0]], [[0, 0], [0, 0]]], [[[0, 0], [0, 0]], [[0, 0], [0, 0]]]]
  *    createNDimensionalArray(1, 1) => [0]
  */
-function createNDimensionalArray(/* n, size */) {
-  throw new Error('Not implemented');
+function createNDimensionalArray(n, size) {
+  if (n === 1) {
+    return Array(size).fill(0);
+  }
+  return Array.from({ length: size }, () =>
+    createNDimensionalArray(n - 1, size)
+  );
 }
 
 /**
@@ -394,8 +399,8 @@ function generateOdds(len) {
  *   getElementByIndices(['one','two','three'], [2]) => 'three'  (arr[2])
  *   getElementByIndices([[[ 1, 2, 3]]], [ 0, 0, 1 ]) => 2        (arr[0][0][1])
  */
-function getElementByIndices(/* arr, indices */) {
-  throw new Error('Not implemented');
+function getElementByIndices(arr, indices) {
+  return indices.reduce((acc, elm) => acc[elm], arr);
 }
 
 /**
@@ -466,8 +471,10 @@ function getIndicesOfOddNumbers(numbers) {
  *    getHexRGBValues([ 0, 255, 16777215]) => [ '#000000', '#0000FF', '#FFFFFF' ]
  *    getHexRGBValues([]) => []
  */
-function getHexRGBValues(/* arr */) {
-  throw new Error('Not implemented');
+function getHexRGBValues(arr) {
+  return arr.map(
+    (elm) => `#${elm.toString(16).padStart(6, '0').toUpperCase()}`
+  );
 }
 
 /**
@@ -518,8 +525,23 @@ function findCommonElements(arr1, arr2) {
  *    findLongestIncreasingSubsequence([3, 10, 2, 1, 20]) => 2
  *    findLongestIncreasingSubsequence([50, 3, 10, 7, 40, 80]) => 3
  */
-function findLongestIncreasingSubsequence(/* nums */) {
-  throw new Error('Not implemented');
+function findLongestIncreasingSubsequence(nums) {
+  const resultArr = nums.reduce(
+    (accumulator, elm, index) => {
+      let result = accumulator[accumulator.length - 1];
+      if (elm < nums[index + 1]) {
+        if (result === 1) accumulator.push(1);
+        result += 1;
+        accumulator[accumulator.length - 1] = result;
+      }
+      if (elm > nums[index + 1]) {
+        accumulator.push(1);
+      }
+      return accumulator;
+    },
+    [1]
+  );
+  return Math.max(...resultArr);
 }
 
 /**
